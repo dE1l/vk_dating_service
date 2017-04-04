@@ -76,6 +76,7 @@ def main():
     printProgressBar(0, l, prefix='Progress:', suffix='Complete', length=50)
     for i, user in enumerate(response['items']):
         printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50)
+        # print(i)
         if user['id'] not in storage['black_list']:
             if user['can_write_private_message'] == 1:
                 friends_data = vk.friends.get(user_id=user['id'])
@@ -84,7 +85,7 @@ def main():
                     if messages["count"] == 0:
                         valid.append(user)
                         black_list.append(user['id'])
-                        print(user['first_name'], user['last_name'], 'http://vk.com/id%s' % user['id'])
+                        print('\n', user['first_name'], user['last_name'], 'http://vk.com/id%s' % user['id'])
     printProgressBar(l, l, prefix='Progress:', suffix='Complete', length=50)
     storage['valid'] = valid
     storage['black_list'] = black_list
