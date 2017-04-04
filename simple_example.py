@@ -6,6 +6,27 @@ import vk_api
 from credentials import User
 
 
+# Print iterations progress
+def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█'):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
+    # Print New Line on Complete
+    if iteration == total:
+        print()
+
 def auth_handler():
     """ При возникновении двухфакторной аутентификации вызывается эта функция.
     """
@@ -51,7 +72,10 @@ def main():
                                sort=0, count=100, country=1, city=103, sex=1, status=1,
                                age_from=23, age_to=25, online=1, has_photo=1)
 
-    for user in response['items']:
+    l = len(response['items'])
+    printProgressBar(0, l, prefix='Progress:', suffix='Complete', length=50)
+    for i, user in enumerate(response['items']):
+        printProgressBar(i, l, prefix='Progress:', suffix='Complete', length=50)
         if user['id'] not in storage['black_list']:
             if user['can_write_private_message'] == 1:
                 friends_data = vk.friends.get(user_id=user['id'])
@@ -61,7 +85,7 @@ def main():
                         valid.append(user)
                         black_list.append(user['id'])
                         print(user['first_name'], user['last_name'], 'http://vk.com/id%s' % user['id'])
-
+    printProgressBar(l, l, prefix='Progress:', suffix='Complete', length=50)
     storage['valid'] = valid
     storage['black_list'] = black_list
     # response = vk.wall.get(count=1)  # Используем метод wall.get
