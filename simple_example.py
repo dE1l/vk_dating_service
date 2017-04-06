@@ -70,7 +70,7 @@ def main():
     """
     response = vk.users.search(fields='photo_max,screen_name, last_seen, can_write_private_message',
                                sort=0, count=300, country=1, city=103, sex=1, status=1,
-                               age_from=23, age_to=25, online=1, has_photo=1)
+                               age_from=22, age_to=25, online=1, has_photo=1)
 
     l = len(response['items'])
     printProgressBar(0, l, prefix='Progress:', suffix='Complete', length=50)
@@ -82,7 +82,7 @@ def main():
                 messages = vk.messages.getHistory(user_id=user['id'], count=0)
                 if messages["count"] == 0:
                     friends_data = vk.friends.get(user_id=user['id'])
-                    if friends_data['count'] < 200:
+                    if friends_data['count'] < 300:
                         valid.append(user)
                         black_list.append(user['id'])
                         print('\n', user['first_name'], user['last_name'], 'http://vk.com/id%s' % user['id'])
